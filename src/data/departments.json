@@ -1,0 +1,73 @@
+[
+  {
+    "id": "ssc",
+    "name": "Staff Selection Commission",
+    "short": "SSC",
+    "category": "Central Government",
+    "keywords": [
+      "ssc",
+      "staff selection commission",
+      "ssc cgl",
+      "ssc chsl",
+      "ssc mts",
+      "ssc gd",
+      "ssc je",
+      "ssc stenographer"
+    ]
+  },
+  {
+    "id": "upsc",
+    "name": "Union Public Service Commission",
+    "short": "UPSC",
+    "category": "Central Government",
+    "keywords": [
+      "upsc",
+      "union public service commission",
+      "civil services",
+      "nda",
+      "cds"
+    ]
+  },
+  {
+    "id": "rrb",
+    "name": "Railway Recruitment Board",
+    "short": "RRB",
+    "category": "Railway",
+    "keywords": [
+      "rrb",
+      "railway recruitment board",
+      "railway",
+      "ntpc",
+      "alp",
+      "technician",
+      "group d"
+    ]
+  },
+  {
+    "id": "ibps",
+    "name": "Institute of Banking Personnel Selection",
+    "short": "IBPS",
+    "category": "Banking",
+    "keywords": [
+      "ibps",
+      "po",
+      "clerk",
+      "rrb officer",
+      "ibps po",
+      "ibps clerk"
+    ]
+  },
+  {
+    "id": "army",
+    "name": "Indian Army",
+    "short": "Army",
+    "category": "Defence",
+    "keywords": [
+      "army",
+      "indian army",
+      "agniveer",
+      "soldier",
+      "army recruitment"
+    ]
+  }
+]
