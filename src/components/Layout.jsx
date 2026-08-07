@@ -1,22 +1,20 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import Header from './Header';
-import Masthead from './Masthead';
-import TabBar from './TabBar';
 import Footer from './Footer';
+import BottomNav from './BottomNav';
 
 export default function Layout() {
   const { pathname } = useLocation();
-  const showMasthead = pathname === '/';
+  const hideBottom = false;
 
   return (
     <>
       <Header />
-      {showMasthead && <Masthead />}
-      <TabBar />
-      <div className="page">
+      <div className={`page ${pathname === '/' ? 'page--home' : ''}`}>
         <Outlet />
       </div>
       <Footer />
+      {!hideBottom && <BottomNav />}
     </>
   );
 }

@@ -5,6 +5,7 @@ import Section from './pages/Section';
 import Detail from './pages/Detail';
 import Search from './pages/Search';
 import Saved from './pages/Saved';
+import Menu from './pages/Menu';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="job/:slug" element={<Detail />} />
         <Route path="search" element={<Search />} />
         <Route path="saved" element={<Saved />} />
+        <Route path="menu" element={<Menu />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

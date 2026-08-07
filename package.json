@@ -1,21 +1,20 @@
 {
-  "name": "sarkari-paper-enrichment",
+  "name": "sarkari-paper",
+  "private": true,
   "version": "1.0.0",
-  "description": "Sarkari Result Scraper + Production Data Enrichment Engine for Cloudflare Workers",
   "type": "module",
-  "main": "worker.js",
   "scripts": {
-    "test": "node src/enrich/__tests__/run-tests.js",
-    "test:enrich": "node src/enrich/__tests__/run-tests.js"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "engines": {
-    "node": ">=18"
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0"
   },
-  "keywords": [
-    "sarkari-result",
-    "government-jobs",
-    "enrichment",
-    "cloudflare-workers"
-  ],
-  "license": "MIT"
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.0"
+  }
 }

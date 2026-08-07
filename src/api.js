@@ -1,6 +1,7 @@
-// Thin wrapper around the Cloudflare Worker scraper API.
-// Set VITE_API_BASE in your environment (see .env.example) to point
-// this at your own Worker deployment.
+/**
+ * Cloudflare Worker scraper API client.
+ * Set VITE_API_BASE to your Worker URL.
+ */
 const API_BASE = import.meta.env.VITE_API_BASE || 'https://sarkariapi.sonukalakhari76.workers.dev';
 
 async function getJson(path) {
@@ -9,19 +10,26 @@ async function getJson(path) {
   return res.json();
 }
 
-export function fetchHomepage() {
-  return getJson('/api/homepage');
+export function fetchHomepage(enrich = false) {
+  return getJson(`/api/homepage${enrich ? '?enrich=1' : ''}`);
 }
 
-export function fetchSection(section) {
-  return getJson(`/api/jobs?section=${encodeURIComponent(section)}`);
+export function fetchSection(section, enrich = false) {
+  const q = enrich ? '&enrich=1' : '';
+  return getJson(`/api/jobs?section=${encodeURIComponent(section)}${q}`);
 }
 
-export function fetchDetail(slug, url) {
-  const qs = url ? `?url=${encodeURIComponent(url)}` : '';
+export function fetchDetail(slug, url, enrich = true) {
+  const params = new URLSearchParams();
+  if (url) params.set('url', url);
+  if (enrich) params.set('enrich', '1');
+  const qs = params.toString() ? `?${params}` : '';
   return getJson(`/api/job/${encodeURIComponent(slug)}${qs}`);
 }
 
-export function fetchSearch(query) {
-  return getJson(`/api/search?q=${encodeURIComponent(query)}`);
+export function fetchSearch(query, enrich = false) {
+  const q = enrich ? '&enrich=1' : '';
+  return getJson(`/api/search?q=${encodeURIComponent(query)}${q}`);
 }
+
+export { API_BASE };
