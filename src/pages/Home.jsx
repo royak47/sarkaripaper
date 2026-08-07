@@ -4,23 +4,42 @@ import { fetchHomepage, fetchSection } from '../api';
 import { SECTIONS, sectionMeta } from '../sections';
 import SectionBlock from '../components/SectionBlock';
 import ErrorState from '../components/ErrorState';
-import { resolveDeadlines, filterClosingSoon, filterByDeadlineWindow } from '../lib/detailCache';
+import {
+  attachDeadlineFromTitle,
+  daysUntil,
+} from '../lib/dates';
+
+function withDeadlines(list) {
+  return (list || []).map(attachDeadlineFromTitle);
+}
+
+function filterClosingSoon(items, withinDays = 7) {
+  return (items || [])
+    .filter((i) => i._daysLeft != null && i._daysLeft >= 0 && i._daysLeft <= withinDays)
+    .sort((a, b) => a._daysLeft - b._daysLeft);
+}
+
+function filterByDeadlineWindow(items, maxDays) {
+  return (items || [])
+    .filter((i) => i._daysLeft != null && i._daysLeft >= 0 && i._daysLeft <= maxDays)
+    .sort((a, b) => a._daysLeft - b._daysLeft);
+}
+
+function dedupeBySlug(items) {
+  const seen = new Set();
+  return items.filter((i) => {
+    if (!i?.slug || seen.has(i.slug)) return false;
+    seen.add(i.slug);
+    return true;
+  });
+}
 
 /**
- * Homepage priority:
- * 1 Closing Soon (≤7 days) — needs detail last-date
- * 2 Latest Updates (newest scraped)
- * 3 Latest Jobs
- * 4 Latest Results
- * 5 Latest Admit Cards
- * 6 Answer Keys
- * 7 Trending Categories (from live data)
- * 8 Upcoming Deadlines (7 / 15 / 30)
- * 9 Remaining by nearest deadline
+ * Homepage priority driven by real API data only.
+ * Last dates parsed from title ("| Last Date : DD/MM/YYYY") — no fake data.
  */
 export default function Home() {
   const [loading, setLoading] = useState(true);
-  const [closingLoading, setClosingLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [latestJobs, setLatestJobs] = useState([]);
@@ -28,7 +47,6 @@ export default function Home() {
   const [admitCards, setAdmitCards] = useState([]);
   const [answerKeys, setAnswerKeys] = useState([]);
   const [onlineForms, setOnlineForms] = useState([]);
-  const [deadlinePool, setDeadlinePool] = useState([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -50,36 +68,27 @@ export default function Home() {
 
         const fromHome = home.sections?.latestjob?.listings || [];
         const jobs = (jobsSec.listings?.length ? jobsSec.listings : fromHome) || [];
-        setLatestJobs(jobs);
-        setResults(resultSec.listings || []);
-        setAdmitCards(admitSec.listings || []);
-        setAnswerKeys(answerSec.listings || []);
-        setOnlineForms(onlineSec.listings || []);
-        setLoading(false);
 
-        // Closing soon: resolve last dates for job-like listings only
-        setClosingLoading(true);
-        const pool = dedupeBySlug([
-          ...jobs.slice(0, 20),
-          ...(onlineSec.listings || []).slice(0, 12),
-        ]);
-        const withDates = await resolveDeadlines(pool, { limit: 28, concurrency: 4 });
-        if (!cancelled) {
-          setDeadlinePool(withDates);
-          setClosingLoading(false);
-        }
+        setLatestJobs(withDeadlines(jobs));
+        setResults(withDeadlines(resultSec.listings || []));
+        setAdmitCards(withDeadlines(admitSec.listings || []));
+        setAnswerKeys(withDeadlines(answerSec.listings || []));
+        setOnlineForms(withDeadlines(onlineSec.listings || []));
       } catch {
-        if (!cancelled) {
-          setError('Homepage load nahi ho saka. API URL check karo.');
-          setLoading(false);
-          setClosingLoading(false);
-        }
+        if (!cancelled) setError('Homepage load nahi ho saka. API URL check karo.');
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     }
 
     load();
     return () => { cancelled = true; };
   }, []);
+
+  const deadlinePool = useMemo(
+    () => dedupeBySlug([...latestJobs, ...onlineForms]),
+    [latestJobs, onlineForms]
+  );
 
   const closingSoon = useMemo(
     () => filterClosingSoon(deadlinePool, 7).slice(0, 12),
@@ -112,14 +121,12 @@ export default function Home() {
     };
     const all = [...latestJobs, ...results, ...admitCards, ...answerKeys, ...onlineForms];
     for (const item of all) {
-      const exam = item.examType;
-      if (exam) bump(`exam:${exam}`, exam, '📑');
+      if (item.examType) bump(`exam:${item.examType}`, item.examType, '📑');
       const dept = item.department?.department;
       if (dept) bump(`dept:${dept}`, dept, '🏛️');
       const cat = item.department?.category;
       if (cat) bump(`cat:${cat}`, cat, '📁');
     }
-    // Always include live section counts
     const sectionCounts = [
       { key: 'latestjob', label: SECTIONS.latestjob.label, icon: SECTIONS.latestjob.icon, count: latestJobs.length },
       { key: 'result', label: SECTIONS.result.label, icon: SECTIONS.result.icon, count: results.length },
@@ -139,6 +146,31 @@ export default function Home() {
 
   return (
     <div className="fade-in home">
+      {/* Hero strip — makes redesign obvious */}
+      <div className="home-hero">
+        <div className="home-hero__text">
+          <p className="home-hero__eyebrow">Government Jobs · Live Feed</p>
+          <h1 className="home-hero__title">Find jobs by deadline, not just by date posted</h1>
+          <p className="home-hero__sub">
+            Closing soon first · Real last dates from notifications · Filters from live data
+          </p>
+        </div>
+        <div className="home-hero__stats">
+          <div className="stat">
+            <span className="stat__n">{closingSoon.length}</span>
+            <span className="stat__l">Closing ≤7d</span>
+          </div>
+          <div className="stat">
+            <span className="stat__n">{latestJobs.length}</span>
+            <span className="stat__l">Latest jobs</span>
+          </div>
+          <div className="stat">
+            <span className="stat__n">{results.length}</span>
+            <span className="stat__l">Results</span>
+          </div>
+        </div>
+      </div>
+
       {/* 1. Closing Soon */}
       <SectionBlock
         id="closing-soon"
@@ -147,16 +179,16 @@ export default function Home() {
         items={closingSoon}
         sectionKey="latestjob"
         layout="horizontal"
-        loading={closingLoading}
-        emptyText={closingLoading ? null : 'Is window me koi closing deadline nahi mili (last date detail se aati hai).'}
+        loading={loading}
+        emptyText={loading ? null : 'Is 7-day window me koi last-date nahi mili titles me.'}
       />
 
-      {/* 2 + 3. Latest Updates / Latest Jobs */}
+      {/* 2–3. Latest Jobs */}
       <SectionBlock
         id="latest-jobs"
         title="Latest Jobs"
         icon="🔥"
-        items={latestJobs.slice(0, 8)}
+        items={latestJobs.slice(0, 9)}
         sectionKey="latestjob"
         viewAllTo="/section/latestjob"
         loading={loading}
@@ -195,7 +227,7 @@ export default function Home() {
         loading={loading}
       />
 
-      {/* 7. Trending Categories — from live data only */}
+      {/* 7. Trending */}
       {!loading && (
         <section className="section-block" id="trending">
           <div className="section-block__head">
@@ -231,8 +263,14 @@ export default function Home() {
             Upcoming Deadlines
           </h2>
         </div>
-        {closingLoading && <div className="card-grid">{Array.from({ length: 3 }).map((_, i) => <div key={i} className="skeleton-card" />)}</div>}
-        {!closingLoading && (
+        {loading && (
+          <div className="card-grid">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="skeleton-card" />
+            ))}
+          </div>
+        )}
+        {!loading && (
           <div className="deadline-cols">
             <DeadlineCol title="Next 7 Days" items={upcoming7} />
             <DeadlineCol title="8–15 Days" items={upcoming15} />
@@ -241,15 +279,15 @@ export default function Home() {
         )}
       </section>
 
-      {/* 10. Remaining by nearest deadline */}
+      {/* 10. Open applications by nearest deadline */}
       <SectionBlock
         id="remaining"
         title="Open Applications"
         icon="📋"
         items={remainingByDeadline}
         sectionKey="latestjob"
-        loading={closingLoading}
-        emptyText={closingLoading ? null : 'Deadline data abhi resolve nahi hui.'}
+        loading={loading}
+        emptyText={loading ? null : 'Deadline wali listings abhi nahi mili.'}
       />
     </div>
   );
@@ -263,9 +301,17 @@ function DeadlineCol({ title, items }) {
       <ul className="deadline-col__list">
         {(items || []).slice(0, 6).map((item) => (
           <li key={item.slug}>
-            <Link to={`/job/${encodeURIComponent(item.slug)}${item.sarkari_link ? `?url=${encodeURIComponent(item.sarkari_link)}` : ''}`}>
+            <Link
+              to={`/job/${encodeURIComponent(item.slug)}${
+                item.sarkari_link ? `?url=${encodeURIComponent(item.sarkari_link)}` : ''
+              }`}
+            >
               <span className="deadline-col__days">
-                {item._daysLeft === 0 ? 'Today' : item._daysLeft === 1 ? 'Tomorrow' : `${item._daysLeft}d`}
+                {item._daysLeft === 0
+                  ? 'Today'
+                  : item._daysLeft === 1
+                    ? 'Tomorrow'
+                    : `${item._daysLeft}d`}
               </span>
               <span className="deadline-col__name">{item.title}</span>
             </Link>
@@ -274,13 +320,4 @@ function DeadlineCol({ title, items }) {
       </ul>
     </div>
   );
-}
-
-function dedupeBySlug(items) {
-  const seen = new Set();
-  return items.filter((i) => {
-    if (!i?.slug || seen.has(i.slug)) return false;
-    seen.add(i.slug);
-    return true;
-  });
 }

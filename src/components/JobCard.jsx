@@ -11,7 +11,8 @@ export default function JobCard({ item, sectionKey, variant = 'default' }) {
   if (!item) return null;
 
   const slug = item.slug;
-  const title = item.title || 'Untitled';
+  const rawTitle = item.title || 'Untitled';
+  const title = rawTitle.replace(/\s*\|\s*Last\s*Date\s*:?.*/i, '').trim() || rawTitle;
   const saved = isSaved(slug);
   const days = item._daysLeft;
   const dlLabel = deadlineLabel(days);

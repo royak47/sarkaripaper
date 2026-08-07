@@ -1,6 +1,6 @@
 /**
- * Date helpers for Closing Soon / deadline logic.
- * Parses common Indian date formats from scraper output.
+ * Date helpers — parse scraper dates + title patterns like:
+ * "SBI Clerk 2026 |Last Date : 27/08/2026"
  */
 
 const MONTHS = {
@@ -13,7 +13,7 @@ const MONTHS = {
 export function parseIndianDate(raw) {
   if (!raw || typeof raw !== 'string') return null;
   const s = raw.trim();
-  if (!s || /not\s*declared|coming\s*soon|to\s*be\s*notified|tba|na\b/i.test(s)) return null;
+  if (!s || /not\s*declared|coming\s*soon|to\s*be\s*notified|tba|\bna\b/i.test(s)) return null;
 
   let m = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);
   if (m) {
@@ -43,6 +43,28 @@ export function parseIndianDate(raw) {
     return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
   }
   return null;
+}
+
+/**
+ * Extract last-apply date from listing title text.
+ * Common pattern on Sarkari Result: "| Last Date : 27/08/2026"
+ */
+export function extractLastDateFromTitle(title) {
+  if (!title) return { date: null, raw: null };
+  const m = String(title).match(
+    /last\s*date\s*[:\-–]?\s*(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4}|\d{1,2}\s+[A-Za-z]+\s+\d{4})/i
+  );
+  if (!m) return { date: null, raw: null };
+  const raw = m[1].trim();
+  // Normalize 2-digit year
+  let normalized = raw;
+  const short = raw.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2})$/);
+  if (short) {
+    const y = parseInt(short[3], 10);
+    const fullY = y < 50 ? 2000 + y : 1900 + y;
+    normalized = `${short[1]}/${short[2]}/${fullY}`;
+  }
+  return { date: parseIndianDate(normalized), raw };
 }
 
 export function startOfToday() {
@@ -89,5 +111,23 @@ export function getLastApplyDate(detail) {
     const parsed = parseIndianDate(c);
     if (parsed) return parsed;
   }
-  return null;
+  // fallback: title
+  const fromTitle = extractLastDateFromTitle(detail.title);
+  return fromTitle.date;
+}
+
+/**
+ * Attach deadline fields to a listing using title (instant, no network).
+ */
+export function attachDeadlineFromTitle(item) {
+  if (!item) return item;
+  if (item._daysLeft != null) return item;
+  const { date, raw } = extractLastDateFromTitle(item.title);
+  const days = daysUntil(date);
+  return {
+    ...item,
+    _lastDate: date,
+    _daysLeft: days,
+    _lastDateRaw: raw,
+  };
 }
