@@ -1,0 +1,79 @@
+========================================================
+AGAR SITE PURANI DIKH RAHI HAI — YE STEPS FOLLOW KARO
+========================================================
+
+Problem: Code naya hai, lekin live server pe PURANA build chal raha hai.
+Zip download se site automatically update NAHI hoti.
+
+--------------------------------------------
+STEP 1: Local pe verify (mandatory)
+--------------------------------------------
+1. Is zip ko extract karo
+2. Terminal kholo, folder me jao:
+
+   cd sarkaripaper-main
+   npm install
+   npm run dev
+
+3. Browser me http://localhost:5173 kholo
+
+4. Upar BLACK BAR dikhni chahiye:
+   "Sarkari Paper v2-premium-2026-08 · New design active"
+
+5. Purple hero + Closing Soon + bottom nav dikhna chahiye
+
+Agar localhost pe naya hai lekin live pe purana:
+  → Deploy missing hai (Step 2)
+
+Agar localhost pe bhi purana hai:
+  → Galat folder open hai. Is extract kiye hue sarkaripaper-main ko open karo.
+
+--------------------------------------------
+STEP 2: Cloudflare Pages deploy
+--------------------------------------------
+
+Option A — Dashboard upload (sabse simple)
+1. npm run build
+2. dist/ folder banegi
+3. Cloudflare Pages → Create project → Upload assets
+4. dist/ ke ANDAR ki files upload karo
+5. Deploy
+
+Option B — Git connected project
+1. Apne GitHub repo me YE naya code push karo (purana overwrite)
+2. Cloudflare Pages auto-build karega
+3. Build settings:
+   - Build command: npm run build
+   - Output directory: dist
+   - Root directory: (jahan package.json hai)
+
+Option C — Wrangler
+   npx wrangler pages deploy dist
+
+--------------------------------------------
+STEP 3: Cache clear
+--------------------------------------------
+- Ctrl+Shift+R (hard refresh)
+- Incognito window try karo
+- Cloudflare → Caching → Purge Everything (agar option ho)
+
+--------------------------------------------
+STEP 4: Environment variable
+--------------------------------------------
+Cloudflare Pages → Settings → Environment variables:
+
+  VITE_API_BASE = https://sarkariapi.sonukalakhari76.workers.dev
+
+(Note: VITE_ variables build time pe lagti hain.
+ Variable change ke baad PHIR SE build/deploy karna padta hai.)
+
+--------------------------------------------
+CHECKLIST
+--------------------------------------------
+[ ] localhost pe black version bar dikhi
+[ ] npm run build successful
+[ ] naya dist deploy hua
+[ ] hard refresh / incognito
+[ ] live pe bhi version bar dikhi
+
+Agar version bar live pe NAHI hai = abhi bhi purana build serve ho raha hai.

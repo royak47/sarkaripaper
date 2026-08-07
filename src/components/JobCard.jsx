@@ -35,7 +35,7 @@ export default function JobCard({ item, sectionKey, variant = 'default' }) {
   const postDate = item.post_date || null;
   const lastDateRaw = item._lastDateRaw || null;
 
-  const to = `/job/${encodeURIComponent(slug)}${item.sarkari_link ? `?url=${encodeURIComponent(item.sarkari_link)}` : ''}`;
+  const to = `/job/${encodeURIComponent(slug)}`;
 
   return (
     <article className={`job-card job-card--${variant}`}>
