@@ -1,0 +1,636 @@
+{
+  "departments": [
+    {
+      "id": "ssc",
+      "name": "Staff Selection Commission",
+      "short": "SSC",
+      "aliases": ["ssc", "staff selection commission", "ssc.nic.in"],
+      "category": "Central Government",
+      "patterns": ["\\bssc\\b", "staff selection commission"]
+    },
+    {
+      "id": "upsc",
+      "name": "Union Public Service Commission",
+      "short": "UPSC",
+      "aliases": ["upsc", "union public service commission"],
+      "category": "Central Government",
+      "patterns": ["\\bupsc\\b", "union public service commission"]
+    },
+    {
+      "id": "rrb",
+      "name": "Railway Recruitment Board",
+      "short": "RRB",
+      "aliases": ["rrb", "railway recruitment board", "rrc", "railway recruitment cell"],
+      "category": "Railway",
+      "patterns": ["\\brrb\\b", "\\brrc\\b", "railway recruitment"]
+    },
+    {
+      "id": "ibps",
+      "name": "Institute of Banking Personnel Selection",
+      "short": "IBPS",
+      "aliases": ["ibps", "institute of banking personnel selection"],
+      "category": "Banking",
+      "patterns": ["\\bibps\\b"]
+    },
+    {
+      "id": "sbi",
+      "name": "State Bank of India",
+      "short": "SBI",
+      "aliases": ["sbi", "state bank of india", "sbi.co.in"],
+      "category": "Banking",
+      "patterns": ["\\bsbi\\b", "state bank of india"]
+    },
+    {
+      "id": "rbi",
+      "name": "Reserve Bank of India",
+      "short": "RBI",
+      "aliases": ["rbi", "reserve bank of india"],
+      "category": "Banking",
+      "patterns": ["\\brbi\\b", "reserve bank of india"]
+    },
+    {
+      "id": "lic",
+      "name": "Life Insurance Corporation of India",
+      "short": "LIC",
+      "aliases": ["lic", "life insurance corporation", "licindia"],
+      "category": "PSU",
+      "patterns": ["\\blic\\b", "life insurance corporation"]
+    },
+    {
+      "id": "indian-army",
+      "name": "Indian Army",
+      "short": "Army",
+      "aliases": ["indian army", "army", "join indian army", "agniveer army"],
+      "category": "Defence",
+      "patterns": ["\\bindian army\\b", "\\barmy\\b", "agniveer.*army"]
+    },
+    {
+      "id": "indian-navy",
+      "name": "Indian Navy",
+      "short": "Navy",
+      "aliases": ["indian navy", "navy", "join indian navy"],
+      "category": "Defence",
+      "patterns": ["\\bindian navy\\b", "\\bnavy\\b"]
+    },
+    {
+      "id": "indian-air-force",
+      "name": "Indian Air Force",
+      "short": "Air Force",
+      "aliases": ["indian air force", "air force", "iaf", "agniveer airforce"],
+      "category": "Defence",
+      "patterns": ["\\bindian air force\\b", "\\bair force\\b", "\\biaf\\b"]
+    },
+    {
+      "id": "bsf",
+      "name": "Border Security Force",
+      "short": "BSF",
+      "aliases": ["bsf", "border security force"],
+      "category": "Defence",
+      "patterns": ["\\bbsf\\b", "border security force"]
+    },
+    {
+      "id": "crpf",
+      "name": "Central Reserve Police Force",
+      "short": "CRPF",
+      "aliases": ["crpf", "central reserve police force"],
+      "category": "Defence",
+      "patterns": ["\\bcrpf\\b", "central reserve police force"]
+    },
+    {
+      "id": "cisf",
+      "name": "Central Industrial Security Force",
+      "short": "CISF",
+      "aliases": ["cisf", "central industrial security force"],
+      "category": "Defence",
+      "patterns": ["\\bcisf\\b", "central industrial security force"]
+    },
+    {
+      "id": "itbp",
+      "name": "Indo-Tibetan Border Police",
+      "short": "ITBP",
+      "aliases": ["itbp", "indo tibetan border police", "indo-tibetan border police"],
+      "category": "Defence",
+      "patterns": ["\\bitbp\\b", "indo.?tibetan border"]
+    },
+    {
+      "id": "ssb",
+      "name": "Sashastra Seema Bal",
+      "short": "SSB",
+      "aliases": ["ssb", "sashastra seema bal"],
+      "category": "Defence",
+      "patterns": ["\\bssb\\b", "sashastra seema bal"]
+    },
+    {
+      "id": "assam-rifles",
+      "name": "Assam Rifles",
+      "short": "Assam Rifles",
+      "aliases": ["assam rifles", "ar"],
+      "category": "Defence",
+      "patterns": ["\\bassam rifles\\b"]
+    },
+    {
+      "id": "nta",
+      "name": "National Testing Agency",
+      "short": "NTA",
+      "aliases": ["nta", "national testing agency"],
+      "category": "Central Government",
+      "patterns": ["\\bnta\\b", "national testing agency"]
+    },
+    {
+      "id": "aiims",
+      "name": "All India Institute of Medical Sciences",
+      "short": "AIIMS",
+      "aliases": ["aiims", "all india institute of medical sciences"],
+      "category": "Medical",
+      "patterns": ["\\baiims\\b"]
+    },
+    {
+      "id": "isro",
+      "name": "Indian Space Research Organisation",
+      "short": "ISRO",
+      "aliases": ["isro", "indian space research"],
+      "category": "PSU",
+      "patterns": ["\\bisro\\b", "indian space research"]
+    },
+    {
+      "id": "drdo",
+      "name": "Defence Research and Development Organisation",
+      "short": "DRDO",
+      "aliases": ["drdo", "defence research and development"],
+      "category": "Defence",
+      "patterns": ["\\bdrdo\\b"]
+    },
+    {
+      "id": "epfo",
+      "name": "Employees Provident Fund Organisation",
+      "short": "EPFO",
+      "aliases": ["epfo", "employees provident fund"],
+      "category": "Central Government",
+      "patterns": ["\\bepfo\\b"]
+    },
+    {
+      "id": "esic",
+      "name": "Employees State Insurance Corporation",
+      "short": "ESIC",
+      "aliases": ["esic", "employees state insurance"],
+      "category": "Central Government",
+      "patterns": ["\\besic\\b"]
+    },
+    {
+      "id": "hal",
+      "name": "Hindustan Aeronautics Limited",
+      "short": "HAL",
+      "aliases": ["hal", "hindustan aeronautics"],
+      "category": "PSU",
+      "patterns": ["\\bhal\\b", "hindustan aeronautics"]
+    },
+    {
+      "id": "bel",
+      "name": "Bharat Electronics Limited",
+      "short": "BEL",
+      "aliases": ["bel", "bharat electronics"],
+      "category": "PSU",
+      "patterns": ["\\bbel\\b", "bharat electronics"]
+    },
+    {
+      "id": "bhel",
+      "name": "Bharat Heavy Electricals Limited",
+      "short": "BHEL",
+      "aliases": ["bhel", "bharat heavy electricals"],
+      "category": "PSU",
+      "patterns": ["\\bbhel\\b"]
+    },
+    {
+      "id": "sail",
+      "name": "Steel Authority of India Limited",
+      "short": "SAIL",
+      "aliases": ["sail", "steel authority of india"],
+      "category": "PSU",
+      "patterns": ["\\bsail\\b"]
+    },
+    {
+      "id": "barc",
+      "name": "Bhabha Atomic Research Centre",
+      "short": "BARC",
+      "aliases": ["barc", "bhabha atomic research"],
+      "category": "PSU",
+      "patterns": ["\\bbarc\\b"]
+    },
+    {
+      "id": "npcil",
+      "name": "Nuclear Power Corporation of India Limited",
+      "short": "NPCIL",
+      "aliases": ["npcil", "nuclear power corporation"],
+      "category": "PSU",
+      "patterns": ["\\bnpcil\\b"]
+    },
+    {
+      "id": "ongc",
+      "name": "Oil and Natural Gas Corporation",
+      "short": "ONGC",
+      "aliases": ["ongc", "oil and natural gas"],
+      "category": "PSU",
+      "patterns": ["\\bongc\\b"]
+    },
+    {
+      "id": "gail",
+      "name": "GAIL India Limited",
+      "short": "GAIL",
+      "aliases": ["gail", "gail india"],
+      "category": "PSU",
+      "patterns": ["\\bgail\\b"]
+    },
+    {
+      "id": "iocl",
+      "name": "Indian Oil Corporation Limited",
+      "short": "IOCL",
+      "aliases": ["iocl", "indian oil"],
+      "category": "PSU",
+      "patterns": ["\\biocl\\b", "indian oil"]
+    },
+    {
+      "id": "hpcl",
+      "name": "Hindustan Petroleum Corporation Limited",
+      "short": "HPCL",
+      "aliases": ["hpcl", "hindustan petroleum"],
+      "category": "PSU",
+      "patterns": ["\\bhpcl\\b"]
+    },
+    {
+      "id": "bpcl",
+      "name": "Bharat Petroleum Corporation Limited",
+      "short": "BPCL",
+      "aliases": ["bpcl", "bharat petroleum"],
+      "category": "PSU",
+      "patterns": ["\\bbpcl\\b"]
+    },
+    {
+      "id": "rpsc",
+      "name": "Rajasthan Public Service Commission",
+      "short": "RPSC",
+      "aliases": ["rpsc", "rajasthan public service commission"],
+      "category": "State Government",
+      "patterns": ["\\brpsc\\b", "rajasthan public service"]
+    },
+    {
+      "id": "rssb",
+      "name": "Rajasthan Subordinate and Ministerial Services Selection Board",
+      "short": "RSSB",
+      "aliases": ["rssb", "rsmssb", "rajasthan subordinate"],
+      "category": "State Government",
+      "patterns": ["\\brssb\\b", "\\brsmssb\\b"]
+    },
+    {
+      "id": "uppsc",
+      "name": "Uttar Pradesh Public Service Commission",
+      "short": "UPPSC",
+      "aliases": ["uppsc", "uttar pradesh public service commission", "up psc"],
+      "category": "State Government",
+      "patterns": ["\\buppsc\\b", "\\bup psc\\b"]
+    },
+    {
+      "id": "upsssc",
+      "name": "Uttar Pradesh Subordinate Services Selection Commission",
+      "short": "UPSSSC",
+      "aliases": ["upsssc", "uttar pradesh subordinate"],
+      "category": "State Government",
+      "patterns": ["\\bupsssc\\b"]
+    },
+    {
+      "id": "bpsc",
+      "name": "Bihar Public Service Commission",
+      "short": "BPSC",
+      "aliases": ["bpsc", "bihar public service commission"],
+      "category": "State Government",
+      "patterns": ["\\bbpsc\\b"]
+    },
+    {
+      "id": "hpsc",
+      "name": "Haryana Public Service Commission",
+      "short": "HPSC",
+      "aliases": ["hpsc", "haryana public service commission"],
+      "category": "State Government",
+      "patterns": ["\\bhpsc\\b"]
+    },
+    {
+      "id": "ukpsc",
+      "name": "Uttarakhand Public Service Commission",
+      "short": "UKPSC",
+      "aliases": ["ukpsc", "uttarakhand public service commission"],
+      "category": "State Government",
+      "patterns": ["\\bukpsc\\b"]
+    },
+    {
+      "id": "wbpsc",
+      "name": "West Bengal Public Service Commission",
+      "short": "WBPSC",
+      "aliases": ["wbpsc", "west bengal public service commission"],
+      "category": "State Government",
+      "patterns": ["\\bwbpsc\\b"]
+    },
+    {
+      "id": "mppsc",
+      "name": "Madhya Pradesh Public Service Commission",
+      "short": "MPPSC",
+      "aliases": ["mppsc", "madhya pradesh public service commission"],
+      "category": "State Government",
+      "patterns": ["\\bmppsc\\b"]
+    },
+    {
+      "id": "gpsc",
+      "name": "Gujarat Public Service Commission",
+      "short": "GPSC",
+      "aliases": ["gpsc", "gujarat public service commission"],
+      "category": "State Government",
+      "patterns": ["\\bgpsc\\b"]
+    },
+    {
+      "id": "mpsc",
+      "name": "Maharashtra Public Service Commission",
+      "short": "MPSC",
+      "aliases": ["mpsc", "maharashtra public service commission"],
+      "category": "State Government",
+      "patterns": ["\\bmpsc\\b"]
+    },
+    {
+      "id": "jkpsc",
+      "name": "Jammu and Kashmir Public Service Commission",
+      "short": "JKPSC",
+      "aliases": ["jkpsc", "jammu and kashmir public service"],
+      "category": "State Government",
+      "patterns": ["\\bjkpsc\\b"]
+    },
+    {
+      "id": "kpsc",
+      "name": "Karnataka Public Service Commission",
+      "short": "KPSC",
+      "aliases": ["kpsc", "karnataka public service commission"],
+      "category": "State Government",
+      "patterns": ["\\bkpsc\\b"]
+    },
+    {
+      "id": "tnpsc",
+      "name": "Tamil Nadu Public Service Commission",
+      "short": "TNPSC",
+      "aliases": ["tnpsc", "tamil nadu public service commission"],
+      "category": "State Government",
+      "patterns": ["\\btnpsc\\b"]
+    },
+    {
+      "id": "kerala-psc",
+      "name": "Kerala Public Service Commission",
+      "short": "Kerala PSC",
+      "aliases": ["kerala psc", "kpsc kerala"],
+      "category": "State Government",
+      "patterns": ["\\bkerala psc\\b"]
+    },
+    {
+      "id": "ossc",
+      "name": "Odisha Staff Selection Commission",
+      "short": "OSSC",
+      "aliases": ["ossc", "odisha staff selection"],
+      "category": "State Government",
+      "patterns": ["\\bossc\\b"]
+    },
+    {
+      "id": "opsc",
+      "name": "Odisha Public Service Commission",
+      "short": "OPSC",
+      "aliases": ["opsc", "odisha public service commission"],
+      "category": "State Government",
+      "patterns": ["\\bopsc\\b"]
+    },
+    {
+      "id": "appsc",
+      "name": "Andhra Pradesh Public Service Commission",
+      "short": "APPSC",
+      "aliases": ["appsc", "andhra pradesh public service"],
+      "category": "State Government",
+      "patterns": ["\\bappsc\\b"]
+    },
+    {
+      "id": "tspsc",
+      "name": "Telangana State Public Service Commission",
+      "short": "TSPSC",
+      "aliases": ["tspsc", "telangana state public service"],
+      "category": "State Government",
+      "patterns": ["\\btspsc\\b"]
+    },
+    {
+      "id": "cgpsc",
+      "name": "Chhattisgarh Public Service Commission",
+      "short": "CGPSC",
+      "aliases": ["cgpsc", "chhattisgarh public service"],
+      "category": "State Government",
+      "patterns": ["\\bcgpsc\\b"]
+    },
+    {
+      "id": "jpsc",
+      "name": "Jharkhand Public Service Commission",
+      "short": "JPSC",
+      "aliases": ["jpsc", "jharkhand public service"],
+      "category": "State Government",
+      "patterns": ["\\bjpsc\\b"]
+    },
+    {
+      "id": "hpssc",
+      "name": "Himachal Pradesh Staff Selection Commission",
+      "short": "HPSSC",
+      "aliases": ["hpssc", "himachal pradesh staff selection"],
+      "category": "State Government",
+      "patterns": ["\\bhpssc\\b"]
+    },
+    {
+      "id": "dsssb",
+      "name": "Delhi Subordinate Services Selection Board",
+      "short": "DSSSB",
+      "aliases": ["dsssb", "delhi subordinate services"],
+      "category": "State Government",
+      "patterns": ["\\bdsssb\\b"]
+    },
+    {
+      "id": "delhi-police",
+      "name": "Delhi Police",
+      "short": "Delhi Police",
+      "aliases": ["delhi police"],
+      "category": "Police",
+      "patterns": ["\\bdelhi police\\b"]
+    },
+    {
+      "id": "railway",
+      "name": "Indian Railways",
+      "short": "Railway",
+      "aliases": ["indian railways", "railway", "railways"],
+      "category": "Railway",
+      "patterns": ["\\bindian railways\\b", "\\brailway\\b"]
+    },
+    {
+      "id": "bank-of-baroda",
+      "name": "Bank of Baroda",
+      "short": "BOB",
+      "aliases": ["bank of baroda", "bob", "baroda"],
+      "category": "Banking",
+      "patterns": ["\\bbank of baroda\\b", "\\bbob\\b"]
+    },
+    {
+      "id": "bank-of-india",
+      "name": "Bank of India",
+      "short": "BOI",
+      "aliases": ["bank of india", "boi"],
+      "category": "Banking",
+      "patterns": ["\\bbank of india\\b"]
+    },
+    {
+      "id": "canara-bank",
+      "name": "Canara Bank",
+      "short": "Canara Bank",
+      "aliases": ["canara bank"],
+      "category": "Banking",
+      "patterns": ["\\bcanara bank\\b"]
+    },
+    {
+      "id": "pnb",
+      "name": "Punjab National Bank",
+      "short": "PNB",
+      "aliases": ["punjab national bank", "pnb"],
+      "category": "Banking",
+      "patterns": ["\\bpunjab national bank\\b", "\\bpnb\\b"]
+    },
+    {
+      "id": "nabard",
+      "name": "National Bank for Agriculture and Rural Development",
+      "short": "NABARD",
+      "aliases": ["nabard"],
+      "category": "Banking",
+      "patterns": ["\\bnabard\\b"]
+    },
+    {
+      "id": "sebi",
+      "name": "Securities and Exchange Board of India",
+      "short": "SEBI",
+      "aliases": ["sebi"],
+      "category": "Central Government",
+      "patterns": ["\\bsebi\\b"]
+    },
+    {
+      "id": "cbic",
+      "name": "Central Board of Indirect Taxes and Customs",
+      "short": "CBIC",
+      "aliases": ["cbic", "customs", "gst"],
+      "category": "Central Government",
+      "patterns": ["\\bcbic\\b"]
+    },
+    {
+      "id": "cbdt",
+      "name": "Central Board of Direct Taxes",
+      "short": "CBDT",
+      "aliases": ["cbdt", "income tax"],
+      "category": "Central Government",
+      "patterns": ["\\bcbdt\\b", "\\bincome tax\\b"]
+    },
+    {
+      "id": "indian-coast-guard",
+      "name": "Indian Coast Guard",
+      "short": "Coast Guard",
+      "aliases": ["indian coast guard", "coast guard", "icg"],
+      "category": "Defence",
+      "patterns": ["\\bindian coast guard\\b", "\\bcoast guard\\b"]
+    },
+    {
+      "id": "fci",
+      "name": "Food Corporation of India",
+      "short": "FCI",
+      "aliases": ["fci", "food corporation of india"],
+      "category": "PSU",
+      "patterns": ["\\bfci\\b", "food corporation"]
+    },
+    {
+      "id": "nhpc",
+      "name": "NHPC Limited",
+      "short": "NHPC",
+      "aliases": ["nhpc"],
+      "category": "PSU",
+      "patterns": ["\\bnhpc\\b"]
+    },
+    {
+      "id": "ntpc",
+      "name": "NTPC Limited",
+      "short": "NTPC",
+      "aliases": ["ntpc"],
+      "category": "PSU",
+      "patterns": ["\\bntpc\\b"]
+    },
+    {
+      "id": "powergrid",
+      "name": "Power Grid Corporation of India",
+      "short": "POWERGRID",
+      "aliases": ["powergrid", "power grid"],
+      "category": "PSU",
+      "patterns": ["\\bpowergrid\\b", "\\bpower grid\\b"]
+    },
+    {
+      "id": "bsnl",
+      "name": "Bharat Sanchar Nigam Limited",
+      "short": "BSNL",
+      "aliases": ["bsnl", "bharat sanchar nigam"],
+      "category": "PSU",
+      "patterns": ["\\bbsnl\\b"]
+    },
+    {
+      "id": "mtnl",
+      "name": "Mahanagar Telephone Nigam Limited",
+      "short": "MTNL",
+      "aliases": ["mtnl"],
+      "category": "PSU",
+      "patterns": ["\\bmtnl\\b"]
+    },
+    {
+      "id": "iit",
+      "name": "Indian Institutes of Technology",
+      "short": "IIT",
+      "aliases": ["iit", "indian institute of technology"],
+      "category": "University",
+      "patterns": ["\\biit\\b", "indian institute of technology"]
+    },
+    {
+      "id": "nit",
+      "name": "National Institutes of Technology",
+      "short": "NIT",
+      "aliases": ["nit", "national institute of technology"],
+      "category": "University",
+      "patterns": ["\\bnit\\b", "national institute of technology"]
+    },
+    {
+      "id": "ugc",
+      "name": "University Grants Commission",
+      "short": "UGC",
+      "aliases": ["ugc", "university grants commission", "net"],
+      "category": "University",
+      "patterns": ["\\bugc\\b", "\\bugc net\\b"]
+    },
+    {
+      "id": "csir",
+      "name": "Council of Scientific and Industrial Research",
+      "short": "CSIR",
+      "aliases": ["csir"],
+      "category": "Central Government",
+      "patterns": ["\\bcsir\\b"]
+    },
+    {
+      "id": "icmr",
+      "name": "Indian Council of Medical Research",
+      "short": "ICMR",
+      "aliases": ["icmr"],
+      "category": "Medical",
+      "patterns": ["\\bicmr\\b"]
+    },
+    {
+      "id": "icfai",
+      "name": "ICFAI",
+      "short": "ICFAI",
+      "aliases": ["icfai"],
+      "category": "University",
+      "patterns": ["\\bicfai\\b"]
+    }
+  ]
+}

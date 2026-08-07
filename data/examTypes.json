@@ -1,0 +1,100 @@
+{
+  "examTypes": [
+    {
+      "id": "central",
+      "name": "Central Government",
+      "aliases": ["central government", "central", "union government", "govt of india"],
+      "patterns": ["\\bcentral\\s*government\\b", "\\bunion\\s*government\\b", "\\bgovt\\.?\\s*of\\s*india\\b"]
+    },
+    {
+      "id": "state",
+      "name": "State Government",
+      "aliases": ["state government", "state", "state govt"],
+      "patterns": ["\\bstate\\s*government\\b", "\\bstate\\s*govt\\b"]
+    },
+    {
+      "id": "railway",
+      "name": "Railway",
+      "aliases": ["railway", "railways", "indian railways", "rrb", "rrc"],
+      "patterns": ["\\brailway\\b", "\\brrb\\b", "\\brrc\\b"]
+    },
+    {
+      "id": "police",
+      "name": "Police",
+      "aliases": ["police", "constable", "si", "sub inspector", "police force"],
+      "patterns": ["\\bpolice\\b", "\\bconstable\\b", "\\bsub\\s*inspector\\b"]
+    },
+    {
+      "id": "teaching",
+      "name": "Teaching",
+      "aliases": ["teaching", "teacher", "lecturer", "professor", "tgt", "pgt", "prt", "primary teacher"],
+      "patterns": ["\\bteaching\\b", "\\bteacher\\b", "\\blecturer\\b", "\\btgt\\b", "\\bpgt\\b", "\\bprt\\b"]
+    },
+    {
+      "id": "banking",
+      "name": "Banking",
+      "aliases": ["banking", "bank", "ibps", "sbi", "po", "clerk", "bank exam"],
+      "patterns": ["\\bbanking\\b", "\\bbank\\b", "\\bibps\\b", "\\bpo\\b", "\\bclerk\\b"]
+    },
+    {
+      "id": "defence",
+      "name": "Defence",
+      "aliases": ["defence", "defense", "army", "navy", "air force", "military", "paramilitary", "agniveer"],
+      "patterns": ["\\bdefence\\b", "\\bdefense\\b", "\\barmy\\b", "\\bnavy\\b", "\\bair\\s*force\\b", "\\bagniveer\\b", "\\bparamilitary\\b"]
+    },
+    {
+      "id": "psu",
+      "name": "PSU",
+      "aliases": ["psu", "public sector", "public sector undertaking", "navratna", "maharatna"],
+      "patterns": ["\\bpsu\\b", "\\bpublic\\s*sector\\b", "\\bnavratna\\b", "\\bmaharatna\\b"]
+    },
+    {
+      "id": "court",
+      "name": "Court",
+      "aliases": ["court", "judiciary", "high court", "supreme court", "district court", "judicial"],
+      "patterns": ["\\bcourt\\b", "\\bjudiciary\\b", "\\bhigh\\s*court\\b", "\\bsupreme\\s*court\\b", "\\bjudicial\\b"]
+    },
+    {
+      "id": "university",
+      "name": "University",
+      "aliases": ["university", "college", "academic", "iit", "nit", "ugc"],
+      "patterns": ["\\buniversity\\b", "\\bcollege\\b", "\\biit\\b", "\\bnit\\b"]
+    },
+    {
+      "id": "medical",
+      "name": "Medical",
+      "aliases": ["medical", "hospital", "health", "aiims", "nurse", "doctor", "paramedical"],
+      "patterns": ["\\bmedical\\b", "\\bhospital\\b", "\\baiims\\b", "\\bnurse\\b", "\\bparamedical\\b"]
+    },
+    {
+      "id": "engineering",
+      "name": "Engineering",
+      "aliases": ["engineering", "engineer", "technical", "je", "ae", "junior engineer"],
+      "patterns": ["\\bengineering\\b", "\\bengineer\\b", "\\bjunior\\s*engineer\\b", "\\bje\\b"]
+    },
+    {
+      "id": "agriculture",
+      "name": "Agriculture",
+      "aliases": ["agriculture", "agricultural", "farming", "agro"],
+      "patterns": ["\\bagriculture\\b", "\\bagricultural\\b", "\\bagro\\b"]
+    },
+    {
+      "id": "insurance",
+      "name": "Insurance",
+      "aliases": ["insurance", "lic", "nicl", "oic", "gic"],
+      "patterns": ["\\binsurance\\b", "\\blic\\b"]
+    },
+    {
+      "id": "forest",
+      "name": "Forest",
+      "aliases": ["forest", "forestry", "forest guard", "ranger"],
+      "patterns": ["\\bforest\\b", "\\bforestry\\b", "\\branger\\b"]
+    },
+    {
+      "id": "revenue",
+      "name": "Revenue",
+      "aliases": ["revenue", "patwari", "lekhpal", "tehsildar"],
+      "patterns": ["\\brevenue\\b", "\\bpatwari\\b", "\\blekhpal\\b", "\\btehsildar\\b"]
+    }
+  ]
+}

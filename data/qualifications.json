@@ -1,0 +1,242 @@
+{
+  "qualifications": [
+    {
+      "id": "5th",
+      "name": "5th Pass",
+      "aliases": ["5th", "5th pass", "class 5", "class v", "fifth"],
+      "level": 1,
+      "patterns": ["\\b5th\\s*pass\\b", "\\bclass\\s*5\\b", "\\bclass\\s*v\\b"]
+    },
+    {
+      "id": "8th",
+      "name": "8th Pass",
+      "aliases": ["8th", "8th pass", "class 8", "class viii", "eighth"],
+      "level": 2,
+      "patterns": ["\\b8th\\s*pass\\b", "\\bclass\\s*8\\b", "\\bclass\\s*viii\\b"]
+    },
+    {
+      "id": "10th",
+      "name": "10th Pass",
+      "aliases": ["10th", "10th pass", "matriculation", "class 10", "class x", "ssc", "high school"],
+      "level": 3,
+      "patterns": ["\\b10th\\s*pass\\b", "\\bmatriculation\\b", "\\bclass\\s*10\\b", "\\bclass\\s*x\\b", "\\bhigh\\s*school\\b"]
+    },
+    {
+      "id": "12th",
+      "name": "12th Pass",
+      "aliases": ["12th", "12th pass", "intermediate", "senior secondary", "class 12", "class xii", "hsc", "plus two", "+2"],
+      "level": 4,
+      "patterns": ["\\b12th\\s*pass\\b", "\\bintermediate\\b", "\\bsenior\\s*secondary\\b", "\\bclass\\s*12\\b", "\\bclass\\s*xii\\b", "\\bhsc\\b", "\\bplus\\s*two\\b", "\\+2\\b"]
+    },
+    {
+      "id": "iti",
+      "name": "ITI",
+      "aliases": ["iti", "industrial training institute", "iti pass"],
+      "level": 5,
+      "patterns": ["\\biti\\b", "industrial training institute"]
+    },
+    {
+      "id": "diploma",
+      "name": "Diploma",
+      "aliases": ["diploma", "polytechnic", "diploma engg", "diploma engineering"],
+      "level": 6,
+      "patterns": ["\\bdiploma\\b", "\\bpolytechnic\\b"]
+    },
+    {
+      "id": "graduate",
+      "name": "Graduate",
+      "aliases": ["graduate", "graduation", "bachelor", "degree", "any graduate", "graduation pass"],
+      "level": 7,
+      "patterns": ["\\bgraduate\\b", "\\bgraduation\\b", "\\bbachelor\\b", "\\bany\\s*graduate\\b", "\\bdegree\\s*holder\\b"]
+    },
+    {
+      "id": "ba",
+      "name": "BA",
+      "aliases": ["ba", "b.a", "bachelor of arts", "b a"],
+      "level": 7,
+      "patterns": ["\\bb\\.?a\\.?\\b", "bachelor of arts"]
+    },
+    {
+      "id": "bsc",
+      "name": "BSc",
+      "aliases": ["bsc", "b.sc", "bachelor of science", "b sc"],
+      "level": 7,
+      "patterns": ["\\bb\\.?sc\\.?\\b", "bachelor of science"]
+    },
+    {
+      "id": "bcom",
+      "name": "BCom",
+      "aliases": ["bcom", "b.com", "bachelor of commerce", "b com"],
+      "level": 7,
+      "patterns": ["\\bb\\.?com\\.?\\b", "bachelor of commerce"]
+    },
+    {
+      "id": "btech",
+      "name": "BTech",
+      "aliases": ["btech", "b.tech", "bachelor of technology", "be", "b.e", "bachelor of engineering"],
+      "level": 7,
+      "patterns": ["\\bb\\.?tech\\.?\\b", "\\bb\\.?e\\.?\\b", "bachelor of technology", "bachelor of engineering"]
+    },
+    {
+      "id": "llb",
+      "name": "LLB",
+      "aliases": ["llb", "l.l.b", "bachelor of law", "law graduate"],
+      "level": 7,
+      "patterns": ["\\bll\\.?b\\.?\\b", "bachelor of law", "\\blaw\\s*graduate\\b"]
+    },
+    {
+      "id": "mbbs",
+      "name": "MBBS",
+      "aliases": ["mbbs", "m.b.b.s", "bachelor of medicine"],
+      "level": 8,
+      "patterns": ["\\bmbbs\\b", "bachelor of medicine"]
+    },
+    {
+      "id": "bds",
+      "name": "BDS",
+      "aliases": ["bds", "b.d.s", "bachelor of dental surgery"],
+      "level": 8,
+      "patterns": ["\\bbds\\b", "bachelor of dental"]
+    },
+    {
+      "id": "bpharma",
+      "name": "BPharma",
+      "aliases": ["bpharma", "b.pharma", "bachelor of pharmacy", "b pharmacy"],
+      "level": 7,
+      "patterns": ["\\bb\\.?pharma\\b", "\\bb\\.?pharmacy\\b", "bachelor of pharmacy"]
+    },
+    {
+      "id": "gnm",
+      "name": "GNM",
+      "aliases": ["gnm", "general nursing and midwifery"],
+      "level": 6,
+      "patterns": ["\\bgnm\\b", "general nursing and midwifery"]
+    },
+    {
+      "id": "anm",
+      "name": "ANM",
+      "aliases": ["anm", "auxiliary nurse midwife"],
+      "level": 5,
+      "patterns": ["\\banm\\b", "auxiliary nurse"]
+    },
+    {
+      "id": "nursing",
+      "name": "Nursing",
+      "aliases": ["nursing", "bsc nursing", "staff nurse"],
+      "level": 6,
+      "patterns": ["\\bnursing\\b", "\\bstaff\\s*nurse\\b"]
+    },
+    {
+      "id": "post-graduate",
+      "name": "Post Graduate",
+      "aliases": ["post graduate", "postgraduate", "pg", "masters", "master degree", "post graduation"],
+      "level": 8,
+      "patterns": ["\\bpost\\s*graduate\\b", "\\bpostgraduate\\b", "\\bpg\\b", "\\bmasters?\\b", "\\bmaster'?s\\s*degree\\b"]
+    },
+    {
+      "id": "ma",
+      "name": "MA",
+      "aliases": ["ma", "m.a", "master of arts"],
+      "level": 8,
+      "patterns": ["\\bm\\.?a\\.?\\b", "master of arts"]
+    },
+    {
+      "id": "msc",
+      "name": "MSc",
+      "aliases": ["msc", "m.sc", "master of science"],
+      "level": 8,
+      "patterns": ["\\bm\\.?sc\\.?\\b", "master of science"]
+    },
+    {
+      "id": "mcom",
+      "name": "MCom",
+      "aliases": ["mcom", "m.com", "master of commerce"],
+      "level": 8,
+      "patterns": ["\\bm\\.?com\\.?\\b", "master of commerce"]
+    },
+    {
+      "id": "mtech",
+      "name": "MTech",
+      "aliases": ["mtech", "m.tech", "master of technology", "me", "m.e"],
+      "level": 8,
+      "patterns": ["\\bm\\.?tech\\.?\\b", "\\bm\\.?e\\.?\\b", "master of technology"]
+    },
+    {
+      "id": "mba",
+      "name": "MBA",
+      "aliases": ["mba", "m.b.a", "master of business administration"],
+      "level": 8,
+      "patterns": ["\\bmba\\b", "master of business administration"]
+    },
+    {
+      "id": "mca",
+      "name": "MCA",
+      "aliases": ["mca", "m.c.a", "master of computer applications"],
+      "level": 8,
+      "patterns": ["\\bmca\\b", "master of computer applications"]
+    },
+    {
+      "id": "ca",
+      "name": "CA",
+      "aliases": ["ca", "chartered accountant"],
+      "level": 8,
+      "patterns": ["\\bca\\b", "\\bchartered\\s*accountant\\b"]
+    },
+    {
+      "id": "cs",
+      "name": "CS",
+      "aliases": ["cs", "company secretary"],
+      "level": 8,
+      "patterns": ["\\bcompany\\s*secretary\\b"]
+    },
+    {
+      "id": "icwa",
+      "name": "ICWA / CMA",
+      "aliases": ["icwa", "cma", "cost accountant"],
+      "level": 8,
+      "patterns": ["\\bicwa\\b", "\\bcma\\b", "\\bcost\\s*accountant\\b"]
+    },
+    {
+      "id": "phd",
+      "name": "PhD",
+      "aliases": ["phd", "ph.d", "doctorate", "doctoral"],
+      "level": 9,
+      "patterns": ["\\bph\\.?d\\.?\\b", "\\bdoctorate\\b", "\\bdoctoral\\b"]
+    },
+    {
+      "id": "bba",
+      "name": "BBA",
+      "aliases": ["bba", "b.b.a", "bachelor of business administration"],
+      "level": 7,
+      "patterns": ["\\bbba\\b", "bachelor of business administration"]
+    },
+    {
+      "id": "bca",
+      "name": "BCA",
+      "aliases": ["bca", "b.c.a", "bachelor of computer applications"],
+      "level": 7,
+      "patterns": ["\\bbca\\b", "bachelor of computer applications"]
+    },
+    {
+      "id": "bed",
+      "name": "BEd",
+      "aliases": ["bed", "b.ed", "bachelor of education"],
+      "level": 7,
+      "patterns": ["\\bb\\.?ed\\.?\\b", "bachelor of education"]
+    },
+    {
+      "id": "med",
+      "name": "MEd",
+      "aliases": ["med", "m.ed", "master of education"],
+      "level": 8,
+      "patterns": ["\\bm\\.?ed\\.?\\b", "master of education"]
+    },
+    {
+      "id": "dpharma",
+      "name": "DPharma",
+      "aliases": ["dpharma", "d.pharma", "diploma in pharmacy"],
+      "level": 6,
+      "patterns": ["\\bd\\.?pharma\\b", "diploma in pharmacy"]
+    }
+  ]
+}

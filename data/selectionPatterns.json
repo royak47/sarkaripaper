@@ -1,0 +1,102 @@
+{
+  "stages": [
+    {
+      "id": "written",
+      "name": "Written Examination",
+      "aliases": ["written exam", "written examination", "written test", "offline exam", "pen paper"],
+      "order": 1,
+      "patterns": ["\\bwritten\\s*(exam|examination|test)\\b", "\\boffline\\s*exam\\b", "\\bpen\\s*(and|&)?\\s*paper\\b"]
+    },
+    {
+      "id": "cbt",
+      "name": "Computer Based Test",
+      "aliases": ["cbt", "computer based test", "online exam", "computer based examination", "online test"],
+      "order": 1,
+      "patterns": ["\\bcbt\\b", "\\bcomputer\\s*based\\s*(test|exam|examination)\\b", "\\bonline\\s*(exam|test)\\b"]
+    },
+    {
+      "id": "pet",
+      "name": "Physical Efficiency Test",
+      "aliases": ["pet", "physical efficiency test", "physical test", "efficiency test"],
+      "order": 3,
+      "patterns": ["\\bpet\\b", "\\bphysical\\s*efficiency\\s*test\\b", "\\bphysical\\s*test\\b"]
+    },
+    {
+      "id": "pst",
+      "name": "Physical Standard Test",
+      "aliases": ["pst", "physical standard test", "physical measurement", "height weight"],
+      "order": 2,
+      "patterns": ["\\bpst\\b", "\\bphysical\\s*standard\\s*test\\b", "\\bphysical\\s*measurement\\b"]
+    },
+    {
+      "id": "skill",
+      "name": "Skill Test",
+      "aliases": ["skill test", "skill assessment", "trade test"],
+      "order": 4,
+      "patterns": ["\\bskill\\s*test\\b", "\\btrade\\s*test\\b"]
+    },
+    {
+      "id": "typing",
+      "name": "Typing Test",
+      "aliases": ["typing test", "typing skill", "typewriting"],
+      "order": 4,
+      "patterns": ["\\btyping\\s*test\\b", "\\btypewriting\\b"]
+    },
+    {
+      "id": "interview",
+      "name": "Interview",
+      "aliases": ["interview", "personal interview", "personality test", "viva", "oral"],
+      "order": 5,
+      "patterns": ["\\binterview\\b", "\\bpersonal\\s*interview\\b", "\\bpersonality\\s*test\\b", "\\bviva\\b"]
+    },
+    {
+      "id": "medical",
+      "name": "Medical Examination",
+      "aliases": ["medical", "medical exam", "medical examination", "medical fitness", "medical test"],
+      "order": 6,
+      "patterns": ["\\bmedical\\s*(exam|examination|test|fitness)\\b"]
+    },
+    {
+      "id": "document",
+      "name": "Document Verification",
+      "aliases": ["document verification", "dv", "document check", "certificate verification"],
+      "order": 7,
+      "patterns": ["\\bdocument\\s*verification\\b", "\\bdv\\b", "\\bcertificate\\s*verification\\b"]
+    },
+    {
+      "id": "group-discussion",
+      "name": "Group Discussion",
+      "aliases": ["group discussion", "gd"],
+      "order": 4,
+      "patterns": ["\\bgroup\\s*discussion\\b", "\\bgd\\b"]
+    },
+    {
+      "id": "descriptive",
+      "name": "Descriptive Test",
+      "aliases": ["descriptive", "descriptive paper", "descriptive test", "essay"],
+      "order": 2,
+      "patterns": ["\\bdescriptive\\s*(test|paper|exam)\\b", "\\bessay\\b"]
+    },
+    {
+      "id": "prelims",
+      "name": "Preliminary Examination",
+      "aliases": ["prelims", "preliminary", "pre exam", "preliminary exam"],
+      "order": 1,
+      "patterns": ["\\bprelims\\b", "\\bpreliminary\\s*(exam|examination)\\b"]
+    },
+    {
+      "id": "mains",
+      "name": "Main Examination",
+      "aliases": ["mains", "main exam", "main examination"],
+      "order": 2,
+      "patterns": ["\\bmains\\b", "\\bmain\\s*(exam|examination)\\b"]
+    },
+    {
+      "id": "screening",
+      "name": "Screening Test",
+      "aliases": ["screening", "screening test", "shortlisting"],
+      "order": 1,
+      "patterns": ["\\bscreening\\s*(test|exam)?\\b"]
+    }
+  ]
+}

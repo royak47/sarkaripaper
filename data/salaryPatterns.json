@@ -1,0 +1,29 @@
+{
+  "patterns": {
+    "payLevel": [
+      "(?:pay\\s*(?:level|matrix|band)|level)\\s*[:\\-]?\\s*(?:L|Level)?\\s*(\\d{1,2})",
+      "level\\s*(\\d{1,2})\\s*(?:of\\s*)?(?:7th\\s*)?cpc"
+    ],
+    "payScale": [
+      "(?:pay\\s*scale|scale\\s*of\\s*pay)\\s*[:\\-]?\\s*(?:rs\\.?|₹|inr)?\\s*([\\d,]+)\\s*[-–to]+\\s*(?:rs\\.?|₹|inr)?\\s*([\\d,]+)",
+      "(?:rs\\.?|₹)\\s*([\\d,]+)\\s*[-–to]+\\s*(?:rs\\.?|₹)?\\s*([\\d,]+)\\s*(?:per\\s*month|/month|pm)?"
+    ],
+    "minMax": [
+      "(?:salary|pay|emolument|remuneration)\\s*(?:range|between)?\\s*[:\\-]?\\s*(?:rs\\.?|₹|inr)?\\s*([\\d,]+)\\s*(?:to|[-–])\\s*(?:rs\\.?|₹|inr)?\\s*([\\d,]+)",
+      "(?:rs\\.?|₹)\\s*([\\d,]+)\\s*[-–to]+\\s*(?:rs\\.?|₹)?\\s*([\\d,]+)"
+    ],
+    "single": [
+      "(?:salary|pay|stipend|honorarium)\\s*[:\\-]?\\s*(?:rs\\.?|₹|inr)?\\s*([\\d,]+)\\s*(?:per\\s*month|/month|pm|/pm)?",
+      "(?:rs\\.?|₹)\\s*([\\d,]+)\\s*(?:per\\s*month|/month|pm)"
+    ],
+    "7thCPC": [
+      "7th\\s*(?:central\\s*)?pay\\s*commission",
+      "7th\\s*cpc"
+    ],
+    "basicPay": [
+      "basic\\s*pay\\s*[:\\-]?\\s*(?:rs\\.?|₹)?\\s*([\\d,]+)"
+    ]
+  },
+  "currency": "INR",
+  "symbol": "₹"
+}

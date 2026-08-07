@@ -1,0 +1,64 @@
+{
+  "jobTypes": [
+    {
+      "id": "permanent",
+      "name": "Permanent",
+      "aliases": ["permanent", "regular", "regular basis", "permanent post", "group a", "group b", "group c", "group d"],
+      "patterns": ["\\bpermanent\\b", "\\bregular\\b", "\\bregular\\s*basis\\b"]
+    },
+    {
+      "id": "contract",
+      "name": "Contract",
+      "aliases": ["contract", "contractual", "on contract", "contract basis", "fixed term"],
+      "patterns": ["\\bcontract\\b", "\\bcontractual\\b", "\\bon\\s*contract\\b", "\\bfixed\\s*term\\b"]
+    },
+    {
+      "id": "apprentice",
+      "name": "Apprentice",
+      "aliases": ["apprentice", "apprenticeship", "apprentice training"],
+      "patterns": ["\\bapprentice\\b", "\\bapprenticeship\\b"]
+    },
+    {
+      "id": "internship",
+      "name": "Internship",
+      "aliases": ["internship", "intern", "trainee"],
+      "patterns": ["\\binternship\\b", "\\bintern\\b", "\\btrainee\\b"]
+    },
+    {
+      "id": "guest",
+      "name": "Guest",
+      "aliases": ["guest", "guest faculty", "guest lecturer", "visiting"],
+      "patterns": ["\\bguest\\b", "\\bguest\\s*faculty\\b", "\\bguest\\s*lecturer\\b"]
+    },
+    {
+      "id": "temporary",
+      "name": "Temporary",
+      "aliases": ["temporary", "temp", "adhoc", "ad-hoc", "stop gap"],
+      "patterns": ["\\btemporary\\b", "\\bad\\s*-?hoc\\b", "\\bstop\\s*gap\\b"]
+    },
+    {
+      "id": "part-time",
+      "name": "Part Time",
+      "aliases": ["part time", "part-time", "parttime"],
+      "patterns": ["\\bpart\\s*-?time\\b"]
+    },
+    {
+      "id": "full-time",
+      "name": "Full Time",
+      "aliases": ["full time", "full-time", "fulltime"],
+      "patterns": ["\\bfull\\s*-?time\\b"]
+    },
+    {
+      "id": "deputation",
+      "name": "Deputation",
+      "aliases": ["deputation", "on deputation"],
+      "patterns": ["\\bdeputation\\b"]
+    },
+    {
+      "id": "outsourced",
+      "name": "Outsourced",
+      "aliases": ["outsourced", "outsourcing", "outsource"],
+      "patterns": ["\\boutsourc\\w*\\b"]
+    }
+  ]
+}
