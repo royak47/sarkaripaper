@@ -9,6 +9,8 @@ const TABS = [
   { to: '/section/result', label: 'Result' },
   { to: '/section/online', label: 'New Vacancy' },
   { to: '/section/admitcard', label: 'Admit Card' },
+  { to: '/section/admission', label: 'Admission' },
+  { to: '/closing', label: 'Last Date' },
 ];
 
 function escapeHtml(s){
@@ -28,10 +30,23 @@ function getTheme(){
   try{ return localStorage.getItem('sp-theme')||'light'; }catch(e){ return 'light'; }
 }
 
+/** Newest first: prefer updated_at / scraped_at, else keep API order */
+function sortNewest(list){
+  return [...(list||[])].sort((a,b)=>{
+    const ta = Number(a.updated_at||a.scraped_at||0);
+    const tb = Number(b.updated_at||b.scraped_at||0);
+    if(tb!==ta) return tb-ta;
+    return 0;
+  });
+}
+
 function renderShell(activePath){
   setTheme(getTheme());
   const tabs = TABS.map(t=>{
-    const active = t.to==='/' ? activePath==='/' : activePath.startsWith(t.to);
+    let active = false;
+    if(t.to==='/') active = activePath==='/';
+    else if(t.to==='/closing') active = activePath.startsWith('/closing');
+    else active = activePath.startsWith(t.to);
     return `<a class="nav-tab${active?' active':''}" href="#${t.to}">${t.label}</a>`;
   }).join('');
   return `
@@ -68,57 +83,74 @@ function renderShell(activePath){
 }
 
 function jobRows(list, limit){
-  const items = (list||[]).slice(0, limit ?? 999);
+  const items = sortNewest(list).slice(0, limit ?? 999);
   if(!items.length) return '<div class="empty">No updates yet</div>';
-  return '<ul class="job-list">'+items.map(j=>`
+  return '<ul class="job-list">'+items.map((j,i)=>`
     <li><a class="job-row" href="#/job/${encodeURIComponent(j.slug)}">
       <span class="job-row-bullet"></span>
-      <span class="job-row-title">${escapeHtml(j.title)}</span>
+      <span class="job-row-title">${i===0&&limit?`<span class="new-tag">NEW</span> `:''}${escapeHtml(j.title)}</span>
+      ${j.last_date?`<span class="row-meta">Last: ${escapeHtml(String(j.last_date).slice(0,16))}</span>`:''}
     </a></li>`).join('')+'</ul>';
 }
 
 function board(title, emoji, key, cls, listings, limit=20){
-  const n = Math.min((listings||[]).length, limit);
+  const sorted = sortNewest(listings);
+  const n = Math.min(sorted.length, limit);
   return `<section class="board">
     <div class="board-head ${cls}">
-      <h2 class="board-title"><span>${emoji}</span> ${title}${n?` <span class="board-badge">${n}</span>`:''}</h2>
+      <h2 class="board-title"><span>${emoji}</span> ${title}${n?` <span class="board-badge">${n}+</span>`:''}</h2>
       <a class="view-more" href="#/section/${key}">View More →</a>
     </div>
-    ${jobRows(listings, limit)}
+    ${jobRows(sorted, limit)}
   </section>`;
 }
 
 function aboutHtml(){
   return `<section class="about-box">
     <h2>About Sarkari Paper</h2>
-    <p><strong>Sarkari Paper</strong> ek free platform hai jahan aap latest government jobs, admit cards, results aur vacancies ek jagah dekh sakte ho.</p>
-    <p>SSC, Banking, Railway, UPSC, State PSC aur dusri bharti updates regular update hoti rehti hain. Apply se pehle hamesha official notification check karein.</p>
-    <p>Site mobile aur computer dono par comfortably chalane ke liye design ki gayi hai. Made by <strong>Mitt Ydv</strong>.</p>
+    <p><strong>Sarkari Paper</strong> free platform hai — latest government jobs, admit cards, results aur vacancies ek jagah.</p>
+    <p>SSC, Banking, Railway, UPSC, State PSC updates regular aate rehte hain. Apply se pehle official notification check karein.</p>
+    <p>Made by <strong>Mitt Ydv</strong>.</p>
   </section>
   <section class="faq-box">
     <h2>FAQ</h2>
-    <div class="faq-item"><strong>Sarkari Paper kya hai?</strong><p>Government job, result aur admit card ki latest information dene wala free website.</p></div>
-    <div class="faq-item"><strong>Kya yahan se form apply hota hai?</strong><p>Nahi. Yahan details milti hain; Apply Online button se official website khulti hai jahan form bhara jata hai.</p></div>
-    <div class="faq-item"><strong>Updates kitni jaldi aate hain?</strong><p>Naye jobs, results aur admit cards regular sync se add hote rehte hain.</p></div>
-    <div class="faq-item"><strong>Mobile par chhote dikhe to?</strong><p>Browser zoom (pinch / Ctrl +) se bada-chhota kar sakte ho — layout har screen ke hisaab se adjust hota hai.</p></div>
+    <div class="faq-item"><strong>Naye posts kahan dikhte hain?</strong><p>Har list ke top pe newest updates aate hain. View More pe poori list milti hai.</p></div>
+    <div class="faq-item"><strong>Last Date button kya hai?</strong><p>Jin forms ki last date jaldi aa rahi hai (aaj / aane wale din), unki list.</p></div>
+    <div class="faq-item"><strong>Search kaise kare?</strong><p>Search icon pe jao, "SSB" / "SBI" / "Railway" type karo — suggestions niche dikhengi.</p></div>
+    <div class="faq-item"><strong>Apply yahan se hota hai?</strong><p>Nahi. Apply Online official site kholta hai.</p></div>
   </section>`;
 }
 
 async function pageHome(root){
   root.innerHTML = '<div class="loading">Loading…</div>';
   try{
-    const data = await api('/api/homepage');
+    const [data, closing] = await Promise.all([
+      api('/api/homepage'),
+      api('/api/closing-soon?days=3').catch(()=>({listings:[]})),
+    ]);
     const s = data.sections || {};
+    const soon = sortNewest(closing.listings || closing.results || []);
+    let soonBar = '';
+    if(soon.length){
+      soonBar = `<div class="soon-bar">
+        <div class="soon-head"><strong>⏰ Last Date Soon</strong>
+          <a href="#/closing">See all →</a></div>
+        <div class="soon-scroll">
+          ${soon.slice(0,8).map(j=>`<a class="soon-chip" href="#/job/${encodeURIComponent(j.slug)}">${escapeHtml((j.title||'').slice(0,48))}${j.last_date?` · ${escapeHtml(String(j.last_date).slice(0,12))}`:''}</a>`).join('')}
+        </div>
+      </div>`;
+    }
     root.innerHTML = `
       <section class="hero">
         <h1>Latest Government Jobs & Results</h1>
-        <p>Sarkari Naukri, Admit Card, Result aur New Vacancy — ek jagah, fast updates. Official link se apply karein.</p>
+        <p>Naye updates list ke <strong>top</strong> pe aate hain. Search se SSB, SBI, Railway… suggest hote hain.</p>
       </section>
       <div class="headline-row">
-        <span class="headline-chip"><span class="dot"></span> Live updates</span>
-        <span class="headline-chip">SSC · Banking · Railway · State</span>
-        <span class="headline-chip">PC &amp; Mobile friendly</span>
+        <span class="headline-chip"><span class="dot"></span> Newest on top</span>
+        <span class="headline-chip">Admission · Last Date</span>
+        <span class="headline-chip">PC &amp; Mobile</span>
       </div>
+      ${soonBar}
       <div class="boards">
         ${board('Result','📊','result','result', s.result?.listings)}
         ${board('Admit Card','🎫','admitcard','admit', s.admitcard?.listings)}
@@ -134,16 +166,43 @@ async function pageHome(root){
 async function pageSection(root, key){
   root.innerHTML = '<div class="loading">Loading…</div>';
   try{
-    const data = await api('/api/jobs?section='+encodeURIComponent(key));
+    const data = await api('/api/jobs?section='+encodeURIComponent(key)+'&limit=100');
     const title = LABELS[key] || data.label || key;
-    const list = data.listings || [];
+    const list = sortNewest(data.listings || []);
     root.innerHTML = `
-      <h1 style="font-size:1.2rem;font-weight:700;margin-bottom:14px">${escapeHtml(title)}</h1>
+      <h1 style="font-size:1.2rem;font-weight:700;margin-bottom:6px">${escapeHtml(title)}</h1>
+      <p class="section-sub">${list.length} posts · newest first</p>
       <section class="section-block">
         <div class="section-head">
           <h2 class="section-title">${escapeHtml(title)} <span class="section-badge">${list.length}</span></h2>
         </div>
         ${jobRows(list)}
+      </section>
+      ${aboutHtml()}
+    `;
+  }catch(e){
+    root.innerHTML = `<div class="error-box">${escapeHtml(e.message)}</div>`;
+  }
+}
+
+async function pageClosing(root){
+  root.innerHTML = '<div class="loading">Loading…</div>';
+  try{
+    const data = await api('/api/closing-soon?days=7');
+    const list = data.listings || [];
+    root.innerHTML = `
+      <h1 style="font-size:1.2rem;font-weight:700;margin-bottom:6px">Last Date Forms</h1>
+      <p class="section-sub">Aaj / aane wale 7 din mein last date — jaldi apply karein</p>
+      <section class="section-block">
+        <div class="section-head">
+          <h2 class="section-title">Closing Soon <span class="section-badge">${list.length}</span></h2>
+        </div>
+        ${list.length? '<ul class="job-list">'+list.map(j=>`
+          <li><a class="job-row" href="#/job/${encodeURIComponent(j.slug)}">
+            <span class="job-row-bullet"></span>
+            <span class="job-row-title">${escapeHtml(j.title)}</span>
+            ${j.last_date?`<span class="row-meta urgent">Last: ${escapeHtml(String(j.last_date))}</span>`:''}
+          </a></li>`).join('')+'</ul>' : '<div class="empty">No forms closing soon</div>'}
       </section>
       ${aboutHtml()}
     `;
@@ -209,21 +268,54 @@ async function pageDetail(root, slug){
 async function pageSearch(root){
   root.innerHTML = `
     <h1 style="font-size:1.2rem;font-weight:700;margin-bottom:14px">Search</h1>
-    <form class="search-box" id="sf">
-      <input id="sq" placeholder="Search jobs, exams…" />
-      <button type="submit">Go</button>
-    </form>
+    <div class="search-wrap">
+      <form class="search-box" id="sf">
+        <input id="sq" placeholder="Type SSB, SBI, Railway, Police…" autocomplete="off" />
+        <button type="submit">Go</button>
+      </form>
+      <div id="suggest" class="suggest-box" hidden></div>
+    </div>
     <div id="sr"></div>`;
+  const input = $('#sq');
+  const suggest = $('#suggest');
+  let timer = null;
+  let lastQ = '';
+
+  async function showSuggest(q){
+    if(q.length < 2){ suggest.hidden = true; return; }
+    try{
+      const data = await api('/api/search?q='+encodeURIComponent(q));
+      const list = (data.results || data.listings || []).slice(0, 8);
+      if(!list.length){ suggest.hidden = true; return; }
+      suggest.innerHTML = list.map(j=>`
+        <a class="suggest-item" href="#/job/${encodeURIComponent(j.slug)}">
+          ${escapeHtml(j.title)}
+        </a>`).join('');
+      suggest.hidden = false;
+    }catch(e){ suggest.hidden = true; }
+  }
+
+  input.addEventListener('input', ()=>{
+    const q = input.value.trim();
+    clearTimeout(timer);
+    timer = setTimeout(()=> showSuggest(q), 280);
+  });
+  input.addEventListener('blur', ()=> setTimeout(()=> { suggest.hidden = true; }, 180));
+  input.addEventListener('focus', ()=> {
+    if(input.value.trim().length>=2) showSuggest(input.value.trim());
+  });
+
   $('#sf').addEventListener('submit', async (e)=>{
     e.preventDefault();
-    const q = $('#sq').value.trim();
+    const q = input.value.trim();
     if(!q) return;
+    suggest.hidden = true;
     const box = $('#sr');
     box.innerHTML = '<div class="loading">Searching…</div>';
     try{
       const data = await api('/api/search?q='+encodeURIComponent(q));
-      const list = data.results || data.listings || [];
-      box.innerHTML = `<section class="section-block"><div class="section-head"><h2 class="section-title">Results <span class="section-badge">${list.length}</span></h2></div>${jobRows(list)}</section>`;
+      const list = sortNewest(data.results || data.listings || []);
+      box.innerHTML = `<section class="section-block"><div class="section-head"><h2 class="section-title">Results for “${escapeHtml(q)}” <span class="section-badge">${list.length}</span></h2></div>${jobRows(list)}</section>`;
     }catch(err){
       box.innerHTML = `<div class="error-box">${escapeHtml(err.message)}</div>`;
     }
@@ -237,12 +329,13 @@ function parseRoute(){
   if(path.startsWith('/section/')) return { name:'section', key: decodeURIComponent(path.slice(9)) };
   if(path.startsWith('/job/')) return { name:'job', slug: decodeURIComponent(path.slice(5)) };
   if(path.startsWith('/search')) return { name:'search' };
+  if(path.startsWith('/closing')) return { name:'closing' };
   return { name:'home' };
 }
 
 async function route(){
   const r = parseRoute();
-  const path = r.name==='home'?'/': r.name==='section'?`/section/${r.key}`: r.name==='search'?'/search':`/job/${r.slug}`;
+  const path = r.name==='home'?'/': r.name==='section'?`/section/${r.key}`: r.name==='search'?'/search': r.name==='closing'?'/closing':`/job/${r.slug}`;
   document.body.innerHTML = renderShell(path);
   $('#themeBtn')?.addEventListener('click', ()=> setTheme(getTheme()==='light'?'dark':'light'));
   $('#menuBtn')?.addEventListener('click', ()=>{
@@ -254,7 +347,6 @@ async function route(){
         <nav class="drawer-nav">
           ${TABS.map(t=>`<a href="#${t.to}">${t.label}</a>`).join('')}
           <a href="#/section/answerkey">Answer Key</a>
-          <a href="#/section/admission">Admission</a>
           <a href="#/search">Search</a>
         </nav>
       </aside>`;
@@ -268,6 +360,7 @@ async function route(){
   else if(r.name==='section') await pageSection(app, r.key);
   else if(r.name==='job') await pageDetail(app, r.slug);
   else if(r.name==='search') await pageSearch(app);
+  else if(r.name==='closing') await pageClosing(app);
   else await pageHome(app);
   window.scrollTo(0,0);
 }
