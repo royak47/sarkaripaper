@@ -1,4 +1,3 @@
-
 const API = 'https://sarkari-api-d1-zip.sonukalakhari76.workers.dev';
 const LABELS = {
   latestjob: 'Latest Job', result: 'Result', admitcard: 'Admit Card',
@@ -12,22 +11,15 @@ const TABS = [
   { to: '/section/admitcard', label: 'Admit Card' },
 ];
 
-function $(sel, el=document){ return el.querySelector(sel); }
-function el(html){
-  const t=document.createElement('template');
-  t.innerHTML=html.trim();
-  return t.content.firstChild;
-}
 function escapeHtml(s){
   return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
-
+function $(sel, el=document){ return el.querySelector(sel); }
 async function api(path){
   const r = await fetch(API + path);
   if(!r.ok) throw new Error('API '+r.status);
   return r.json();
 }
-
 function setTheme(t){
   document.documentElement.setAttribute('data-theme', t);
   try{ localStorage.setItem('sp-theme', t); }catch(e){}
@@ -37,8 +29,7 @@ function getTheme(){
 }
 
 function renderShell(activePath){
-  const theme = getTheme();
-  setTheme(theme);
+  setTheme(getTheme());
   const tabs = TABS.map(t=>{
     const active = t.to==='/' ? activePath==='/' : activePath.startsWith(t.to);
     return `<a class="nav-tab${active?' active':''}" href="#${t.to}">${t.label}</a>`;
@@ -86,14 +77,30 @@ function jobRows(list, limit){
     </a></li>`).join('')+'</ul>';
 }
 
-function sectionBlock(title, emoji, key, listings, limit=20){
+function board(title, emoji, key, cls, listings, limit=20){
   const n = Math.min((listings||[]).length, limit);
-  return `<section class="section-block">
-    <div class="section-head">
-      <h2 class="section-title"><span>${emoji}</span> ${title}${n?`<span class="section-badge">${n}</span>`:''}</h2>
+  return `<section class="board">
+    <div class="board-head ${cls}">
+      <h2 class="board-title"><span>${emoji}</span> ${title}${n?` <span class="board-badge">${n}</span>`:''}</h2>
       <a class="view-more" href="#/section/${key}">View More →</a>
     </div>
     ${jobRows(listings, limit)}
+  </section>`;
+}
+
+function aboutHtml(){
+  return `<section class="about-box">
+    <h2>About Sarkari Paper</h2>
+    <p><strong>Sarkari Paper</strong> ek free platform hai jahan aap latest government jobs, admit cards, results aur vacancies ek jagah dekh sakte ho.</p>
+    <p>SSC, Banking, Railway, UPSC, State PSC aur dusri bharti updates regular update hoti rehti hain. Apply se pehle hamesha official notification check karein.</p>
+    <p>Site mobile aur computer dono par comfortably chalane ke liye design ki gayi hai. Made by <strong>Mitt Ydv</strong>.</p>
+  </section>
+  <section class="faq-box">
+    <h2>FAQ</h2>
+    <div class="faq-item"><strong>Sarkari Paper kya hai?</strong><p>Government job, result aur admit card ki latest information dene wala free website.</p></div>
+    <div class="faq-item"><strong>Kya yahan se form apply hota hai?</strong><p>Nahi. Yahan details milti hain; Apply Online button se official website khulti hai jahan form bhara jata hai.</p></div>
+    <div class="faq-item"><strong>Updates kitni jaldi aate hain?</strong><p>Naye jobs, results aur admit cards regular sync se add hote rehte hain.</p></div>
+    <div class="faq-item"><strong>Mobile par chhote dikhe to?</strong><p>Browser zoom (pinch / Ctrl +) se bada-chhota kar sakte ho — layout har screen ke hisaab se adjust hota hai.</p></div>
   </section>`;
 }
 
@@ -105,16 +112,19 @@ async function pageHome(root){
     root.innerHTML = `
       <section class="hero">
         <h1>Latest Government Jobs & Results</h1>
-        <p>Sarkari Naukri, Admit Card, Result aur New Vacancy — ek jagah, fast updates.</p>
+        <p>Sarkari Naukri, Admit Card, Result aur New Vacancy — ek jagah, fast updates. Official link se apply karein.</p>
       </section>
       <div class="headline-row">
         <span class="headline-chip"><span class="dot"></span> Live updates</span>
         <span class="headline-chip">SSC · Banking · Railway · State</span>
-        <span class="headline-chip">Mobile friendly</span>
+        <span class="headline-chip">PC &amp; Mobile friendly</span>
       </div>
-      ${sectionBlock('Result','📊','result', s.result?.listings)}
-      ${sectionBlock('Admit Card','🎫','admitcard', s.admitcard?.listings)}
-      ${sectionBlock('Latest Job','💼','latestjob', s.latestjob?.listings)}
+      <div class="boards">
+        ${board('Result','📊','result','result', s.result?.listings)}
+        ${board('Admit Card','🎫','admitcard','admit', s.admitcard?.listings)}
+        ${board('Latest Job','💼','latestjob','job', s.latestjob?.listings)}
+      </div>
+      ${aboutHtml()}
     `;
   }catch(e){
     root.innerHTML = `<div class="error-box">${escapeHtml(e.message)}</div>`;
@@ -134,7 +144,9 @@ async function pageSection(root, key){
           <h2 class="section-title">${escapeHtml(title)} <span class="section-badge">${list.length}</span></h2>
         </div>
         ${jobRows(list)}
-      </section>`;
+      </section>
+      ${aboutHtml()}
+    `;
   }catch(e){
     root.innerHTML = `<div class="error-box">${escapeHtml(e.message)}</div>`;
   }
@@ -145,9 +157,9 @@ function kvHtml(obj){
   return '<div class="kv-grid">'+Object.entries(obj).filter(([,v])=>v!=null&&String(v).trim()!=='')
     .map(([k,v])=>`<div class="kv-item"><span class="kv-key">${escapeHtml(k)}</span><span class="kv-val">${escapeHtml(v)}</span></div>`).join('')+'</div>';
 }
-function card(label, body){
+function card(label, body, full){
   if(!body) return '';
-  return `<div class="info-card"><div class="info-card-label">${label}</div><div class="info-card-body">${body}</div></div>`;
+  return `<div class="info-card${full?' full':''}"><div class="info-card-label">${label}</div><div class="info-card-body">${body}</div></div>`;
 }
 
 async function pageDetail(root, slug){
@@ -176,14 +188,17 @@ async function pageDetail(root, slug){
     }
     root.innerHTML = `
       <button type="button" class="detail-back" id="backBtn">← Back</button>
-      ${card('Name Of Post', escapeHtml(job.title))}
-      ${job.post_date?card('Post Date / Update', escapeHtml(job.post_date)):''}
-      ${(job.description||job.short_info)?card('Short Information', `<p class="muted">${escapeHtml(job.description||job.short_info)}</p>`):''}
-      ${job.dates?card('Important Dates', kvHtml(job.dates)):''}
-      ${job.fees?card('Application Fee', kvHtml(job.fees)):''}
-      ${job.age_limit?card('Age Limit', kvHtml(job.age_limit)):''}
-      ${postsHtml?card('Vacancy Details', postsHtml):''}
-      ${linksHtml?card('Important Links', linksHtml):''}
+      <div class="detail-grid">
+        ${card('Name Of Post', escapeHtml(job.title), true)}
+        ${job.post_date?card('Post Date / Update', escapeHtml(job.post_date)):''}
+        ${(job.description||job.short_info)?card('Short Information', `<p class="muted">${escapeHtml(job.description||job.short_info)}</p>`):''}
+        ${job.dates?card('Important Dates', kvHtml(job.dates)):''}
+        ${job.fees?card('Application Fee', kvHtml(job.fees)):''}
+        ${job.age_limit?card('Age Limit', kvHtml(job.age_limit)):''}
+        ${postsHtml?card('Vacancy Details', postsHtml, true):''}
+        ${linksHtml?card('Important Links', linksHtml, true):''}
+      </div>
+      ${aboutHtml()}
     `;
     $('#backBtn')?.addEventListener('click', ()=> history.back());
   }catch(e){
@@ -229,9 +244,7 @@ async function route(){
   const r = parseRoute();
   const path = r.name==='home'?'/': r.name==='section'?`/section/${r.key}`: r.name==='search'?'/search':`/job/${r.slug}`;
   document.body.innerHTML = renderShell(path);
-  $('#themeBtn')?.addEventListener('click', ()=>{
-    setTheme(getTheme()==='light'?'dark':'light');
-  });
+  $('#themeBtn')?.addEventListener('click', ()=> setTheme(getTheme()==='light'?'dark':'light'));
   $('#menuBtn')?.addEventListener('click', ()=>{
     const root = $('#drawerRoot');
     root.innerHTML = `<div class="drawer-overlay" id="ov"></div>
