@@ -131,7 +131,7 @@ function renderShell(activePath){
 }
 
 function jobRows(list, limit, doSort=true){
-  const base = doSort ? sortNewest(list) : [...(list||[])];
+  const base = sortNewest(list);
   const items = base.slice(0, limit ?? 999);
   if(!items.length) return '<div class="empty">No updates yet</div>';
   const now = Date.now();
@@ -156,7 +156,7 @@ function board(title, emoji, key, cls, listings, limit=20){
       <h2 class="board-title"><span>${emoji}</span> ${title}${n?` <span class="board-badge">${n}+</span>`:''}</h2>
       <a class="view-more" href="#/section/${key}">View More →</a>
     </div>
-    ${jobRows(list, limit, false)}
+    ${jobRows(list, limit, true)}
   </section>`;
 }
 
