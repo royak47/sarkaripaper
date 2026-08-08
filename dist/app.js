@@ -204,8 +204,8 @@ async function pageHome(root){
     }
     root.innerHTML = `
       <section class="hero">
-        <h1>Latest Government Jobs & Results</h1>
-        <p>Naye updates list ke <strong>top</strong> pe aate hain. Search se SSB, SBI, Railway… suggest hote hain.</p>
+        <h1>Government Jobs, Results & Admit Cards</h1>
+        <p>Latest openings, exam results and admit cards in one place. Search SSC, Railway, Banking and more — updated daily.</p>
       </section>
       <div class="headline-row">
         <span class="headline-chip"><span class="dot"></span> Newest on top</span>
