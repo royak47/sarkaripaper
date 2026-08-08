@@ -30,14 +30,62 @@ function getTheme(){
   try{ return localStorage.getItem('sp-theme')||'light'; }catch(e){ return 'light'; }
 }
 
-/** Newest first: prefer updated_at / scraped_at, else keep API order */
+/** Parse post date → timestamp (ms). Newer = higher. */
+function postTs(job){
+  if(!job) return 0;
+  // 1) explicit post_date: "07 August 2026 | 01:55 PM" or "08 Aug 2026"
+  const pd = String(job.post_date||'');
+  if(pd){
+    const m = pd.match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})(?:.*?(\d{1,2}):(\d{2})\s*(AM|PM))?/i);
+    if(m){
+      const months = {jan:0,january:0,feb:1,february:1,mar:2,march:2,apr:3,april:3,may:4,jun:5,june:5,jul:6,july:6,aug:7,august:7,sep:8,sept:8,september:8,oct:9,october:9,nov:10,november:10,dec:11,december:11};
+      const mo = months[m[2].toLowerCase()];
+      if(mo!=null){
+        let h = m[4]!=null ? parseInt(m[4],10) : 12;
+        const min = m[5]!=null ? parseInt(m[5],10) : 0;
+        const ap = (m[6]||'PM').toUpperCase();
+        if(ap==='PM' && h<12) h+=12;
+        if(ap==='AM' && h===12) h=0;
+        const d = new Date(parseInt(m[3],10), mo, parseInt(m[1],10), h, min);
+        if(!Number.isNaN(d.getTime())) return d.getTime();
+      }
+    }
+    // DD/MM/YYYY
+    const m2 = pd.match(/(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/);
+    if(m2){
+      let y = parseInt(m2[3],10); if(y<100) y+=2000;
+      const d = new Date(y, parseInt(m2[2],10)-1, parseInt(m2[1],10));
+      if(!Number.isNaN(d.getTime())) return d.getTime();
+    }
+  }
+  // 2) slug year-month hints: 2026-sbi-...-aug26 / july26
+  const slug = String(job.slug||job.sarkari_link||'');
+  const sm = slug.match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-_]?(\d{2})/i);
+  const ym = slug.match(/\b(20\d{2})\b/);
+  if(sm && ym){
+    const months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+    const mo = months[sm[1].slice(0,3).toLowerCase()];
+    if(mo!=null){
+      const d = new Date(parseInt(ym[1],10), mo, 28); // end of month bias for month-only
+      if(!Number.isNaN(d.getTime())) return d.getTime();
+    }
+  }
+  // 3) No reliable publish date — return 0 (keep API/scrape order)
+  return 0;
+}
+
+/** Newest published first (aaj top → kal → purane). No post_date = keep server order. */
 function sortNewest(list){
-  return [...(list||[])].sort((a,b)=>{
-    const ta = Number(a.updated_at||a.scraped_at||0);
-    const tb = Number(b.updated_at||b.scraped_at||0);
+  const arr = [...(list||[])];
+  // annotate original index so zero-date items keep relative order (usually newest-first from site)
+  arr.forEach((j,i)=> { j._i = i; });
+  arr.sort((a,b)=>{
+    const tb = postTs(b);
+    const ta = postTs(a);
     if(tb!==ta) return tb-ta;
-    return 0;
+    return (a._i||0) - (b._i||0);
   });
+  return arr;
 }
 
 function renderShell(activePath){
@@ -85,12 +133,17 @@ function renderShell(activePath){
 function jobRows(list, limit){
   const items = sortNewest(list).slice(0, limit ?? 999);
   if(!items.length) return '<div class="empty">No updates yet</div>';
-  return '<ul class="job-list">'+items.map((j,i)=>`
-    <li><a class="job-row" href="#/job/${encodeURIComponent(j.slug)}">
+  const now = Date.now();
+  const day2 = 2*86400000;
+  return '<ul class="job-list">'+items.map((j)=>{
+    const ts = postTs(j);
+    const isNew = ts && (now - ts) < day2;
+    return `<li><a class="job-row" href="#/job/${encodeURIComponent(j.slug)}">
       <span class="job-row-bullet"></span>
-      <span class="job-row-title">${i===0&&limit?`<span class="new-tag">NEW</span> `:''}${escapeHtml(j.title)}</span>
+      <span class="job-row-title">${isNew?`<span class="new-tag">NEW</span> `:''}${escapeHtml(j.title)}</span>
       ${j.last_date?`<span class="row-meta">Last: ${escapeHtml(String(j.last_date).slice(0,16))}</span>`:''}
-    </a></li>`).join('')+'</ul>';
+    </a></li>`;
+  }).join('')+'</ul>';
 }
 
 function board(title, emoji, key, cls, listings, limit=20){
