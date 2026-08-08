@@ -1,66 +1,65 @@
-import { useEffect, useState } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { fetchSearch } from '../api';
-import JobCard from '../components/JobCard';
-import ErrorState from '../components/ErrorState';
-import EmptyState from '../components/EmptyState';
-import { BoardSkeleton } from '../components/Skeletons';
 
 export default function Search() {
-  const [params] = useSearchParams();
-  const q = (params.get('q') || '').trim();
+  const [q, setQ] = useState('');
+  const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [results, setResults] = useState([]);
 
-  useEffect(() => {
-    if (!q) {
-      setResults([]);
-      return;
-    }
-    let cancelled = false;
+  async function onSubmit(e) {
+    e.preventDefault();
+    if (!q.trim()) return;
     setLoading(true);
     setError(null);
-    fetchSearch(q, true)
-      .then((d) => {
-        if (!cancelled) setResults(d.results || []);
-      })
-      .catch(() => {
-        if (!cancelled) setError('Search fail ho gaya.');
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => { cancelled = true; };
-  }, [q]);
+    try {
+      const data = await fetchSearch(q.trim());
+      setResults(data.results || data.listings || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
-    <div className="fade-in search-page">
-      <Link className="btn-back" to="/">← Home</Link>
-      <h1 className="page-title">
-        {q ? (
-          <>
-            Results for <span className="text-accent">“{q}”</span>
-          </>
-        ) : (
-          'Search'
-        )}
-      </h1>
-      {!q && <p className="page-sub">Header se keyword type karein — live suggestions milenge.</p>}
-      {q && <p className="page-sub">{loading ? 'Searching…' : `${results.length} matches`}</p>}
-
-      {error && <ErrorState message={error} />}
-      {loading && <BoardSkeleton count={6} />}
-      {!loading && q && results.length === 0 && !error && (
-        <EmptyState title="Koi result nahi mila" />
+    <>
+      <h1 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: 14 }}>Search</h1>
+      <form className="search-box" onSubmit={onSubmit}>
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Search jobs, exams…"
+          aria-label="Search"
+        />
+        <button type="submit">Go</button>
+      </form>
+      {loading && <div className="loading">Searching…</div>}
+      {error && <div className="error-box">{error}</div>}
+      {results && (
+        <section className="section-block">
+          <div className="section-head">
+            <h2 className="section-title">
+              Results <span className="section-badge">{results.length}</span>
+            </h2>
+          </div>
+          {results.length === 0 ? (
+            <div className="empty">No matches</div>
+          ) : (
+            <ul className="job-list">
+              {results.map((job) => (
+                <li key={job.slug}>
+                  <Link to={`/job/${encodeURIComponent(job.slug)}`} className="job-row">
+                    <span className="job-row-bullet" />
+                    <span className="job-row-title">{job.title}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
       )}
-      {!loading && results.length > 0 && (
-        <div className="card-grid">
-          {results.map((item) => (
-            <JobCard key={item.slug} item={item} sectionKey={item.section} />
-          ))}
-        </div>
-      )}
-    </div>
+    </>
   );
 }
