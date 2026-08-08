@@ -130,8 +130,9 @@ function renderShell(activePath){
   <div id="drawerRoot"></div>`;
 }
 
-function jobRows(list, limit){
-  const items = sortNewest(list).slice(0, limit ?? 999);
+function jobRows(list, limit, doSort=true){
+  const base = doSort ? sortNewest(list) : [...(list||[])];
+  const items = base.slice(0, limit ?? 999);
   if(!items.length) return '<div class="empty">No updates yet</div>';
   const now = Date.now();
   const day2 = 2*86400000;
@@ -147,14 +148,15 @@ function jobRows(list, limit){
 }
 
 function board(title, emoji, key, cls, listings, limit=20){
-  const sorted = sortNewest(listings);
-  const n = Math.min(sorted.length, limit);
+  // Keep API order (newest first after sync) — same as section page
+  const list = listings || [];
+  const n = Math.min(list.length, limit);
   return `<section class="board">
     <div class="board-head ${cls}">
       <h2 class="board-title"><span>${emoji}</span> ${title}${n?` <span class="board-badge">${n}+</span>`:''}</h2>
       <a class="view-more" href="#/section/${key}">View More →</a>
     </div>
-    ${jobRows(sorted, limit)}
+    ${jobRows(list, limit, false)}
   </section>`;
 }
 
@@ -177,12 +179,19 @@ function aboutHtml(){
 async function pageHome(root){
   root.innerHTML = '<div class="loading">Loading…</div>';
   try{
-    const [data, closing] = await Promise.all([
-      api('/api/homepage'),
+    // Same endpoints as View More / section tabs → same latest order
+    const [result, admitcard, latestjob, closing] = await Promise.all([
+      api('/api/jobs?section=result&limit=30'),
+      api('/api/jobs?section=admitcard&limit=30'),
+      api('/api/jobs?section=latestjob&limit=30'),
       api('/api/closing-soon?days=3').catch(()=>({listings:[]})),
     ]);
-    const s = data.sections || {};
-    const soon = sortNewest(closing.listings || closing.results || []);
+    const s = {
+      result: result,
+      admitcard: admitcard,
+      latestjob: latestjob,
+    };
+    const soon = closing.listings || closing.results || [];
     let soonBar = '';
     if(soon.length){
       soonBar = `<div class="soon-bar">
